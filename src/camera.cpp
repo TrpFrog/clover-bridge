@@ -16,7 +16,7 @@ camera::camera(int w, int h) {
     camera::reset();
 }
 
-void camera::apply() {
+void camera::apply() const {
     std::pair<double, double> p;
 
     p.first = (cur_cursor_pos.first - prv_cursor_pos.first) / width * M_PI;
