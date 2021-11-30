@@ -37,7 +37,6 @@ void camera::apply() {
 
 void camera::reset() {
     x = y = z = 0;
-    tx = ty = tz = 0;
     key_pressed = false;
     eye_radius = 5;
     angle_h = M_PI / 4;
