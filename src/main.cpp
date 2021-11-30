@@ -15,28 +15,7 @@ void display() {
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glPushMatrix();
-    glBegin(GL_LINES);
-
-    glColor3f ( 1.0f, 0.0f, 0.0f );
-    glVertex3f( 1.0f, 0.0f, 0.0f );
-    glVertex3f( 0.0f, 0.0f, 0.0f );
-
-    glColor3f ( 0.0f, 1.0f, 0.0f );
-    glVertex3f( 0.0f, 1.0f, 0.0f );
-    glVertex3f( 0.0f, 0.0f, 0.0f );
-
-    glColor3f ( 0.0f, 0.0f, 1.0f );
-    glVertex3f( 0.0f, 0.0f, 1.0f );
-    glVertex3f( 0.0f, 0.0f, 0.0f );
-
-    glEnd();
-    glPopMatrix();
-
-    glColor3d(0, 0, 0);
-
-    glColor3d(0.0, 0.0, 0.0);
-//    draw::box(1, 1, 1);
+    draw::all();
     glLoadIdentity();
     cam.apply();
 
