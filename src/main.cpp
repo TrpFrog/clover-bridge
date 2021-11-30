@@ -1,9 +1,6 @@
 #include <iostream>
 
 #include "useful_macros.h"
-#include <OpenGL/OpenGL.h>
-#include <GLUT/GLUT.h>
-#include <vector>
 #include "draw.h"
 #include "camera.h"
 

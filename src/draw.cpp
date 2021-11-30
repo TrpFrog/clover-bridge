@@ -1,8 +1,6 @@
 #include "draw.h"
 #include "parts.h"
 #include "useful_macros.h"
-#include <OpenGL/OpenGL.h>
-#include <GLUT/GLUT.h>
 #include <vector>
 #include <cmath>
 

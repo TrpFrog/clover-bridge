@@ -3,6 +3,13 @@
 
 #include <iostream>
 #define GL_SILENCE_DEPRECATION
+#include <OpenGL/OpenGL.h>
+
+#ifdef __APPLE__
+    #include <GLUT/GLUT.h>
+#else
+    #include <GL/glut>
+#endif
 
 // iterator
 #define ALL(obj) (obj).begin(), (obj).end()

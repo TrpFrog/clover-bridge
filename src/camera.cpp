@@ -1,9 +1,6 @@
 #include "camera.h"
 #include "useful_macros.h"
 
-#include <OpenGL/OpenGL.h>
-#include <GLUT/GLUT.h>
-
 #include <cmath>
 #include <tuple>
 #include <algorithm>
