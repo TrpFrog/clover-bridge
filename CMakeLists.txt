@@ -4,6 +4,8 @@ project(clover-bridge)
 set(CMAKE_CXX_STANDARD 20)
 set(sources
         src/main.cpp
+        src/parts.cpp
+        src/parts.h
         src/draw.cpp
         src/draw.h
         src/camera.cpp
