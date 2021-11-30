@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.20)
 project(clover-bridge)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 17)
 set(sources
         src/main.cpp
         src/parts.cpp
