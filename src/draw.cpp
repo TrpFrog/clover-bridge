@@ -4,8 +4,9 @@
 #include <vector>
 #include <cmath>
 
+
 void draw::all() {
-    draw::axis();
+//    draw::axis();
     draw::river();
     draw::bridge();
     draw::bank();
@@ -31,8 +32,10 @@ void draw::axis() {
 }
 
 void draw::river() {
-    glColor3f(.5f, .5f, 1.0f);
-    const float field_size = 22;
+    GLfloat river_color[] = {.3f / 2, .44f / 2, 0.85f / 2, 1.0f};
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, river_color);
+    const float field_size = 202;
+    glNormal3d(0, 1, 0);
     glBegin(GL_QUADS); {
         glVertex3d(field_size / 2, 0, field_size / 2);
         glVertex3d(field_size / 2, 0, -field_size / 2);
@@ -43,21 +46,65 @@ void draw::river() {
 
 void draw::bridge() {
     glPushMatrix();
+    GLfloat bridge_color[] = {0.4f, 0.4f, 0.4f, 1.0f};
+    GLfloat fence_color[] = {0.4f, 0.4f, 0.8f, 1.0f};
 
     glColor3f(0.7f, 0.7f, 0.7f);
-    glTranslated(0, 0.9, 0);
+    glTranslated(0, 0.899, 0);
     glRotated(45, 0, 1, 0);
-    REP(i, 2) {
-        parts::box(1.2, 0.2, 10);
+
+    std::vector<vertexv> circle_vertices;
+    {
+        const int n = 12;
+        const double r = 0.05;
+        double dtheta = 2 * M_PI / n;
+        REP(i, n) {
+            circle_vertices.emplace_back(r * std::sin(dtheta * i), 0, r * std::cos(dtheta * i));
+        }
+    }
+
+    const int fence_cnt = 5;
+    const double bridge_length = 8, bridge_width = 1.2, fence_height = 0.5;
+
+    REP(i, 4) {
+
+        glMaterialfv(GL_FRONT, GL_DIFFUSE, fence_color);
+        for(double x : {-0.5, 0.5}) {
+            glPushMatrix();
+            glTranslated(x, 0, bridge_width / 2 - 0.1);
+            REP(j, fence_cnt) {
+                parts::pillar(circle_vertices, 0, fence_height, 0);
+                glTranslated(0, 0, (bridge_length / 2 - bridge_width / 2) / (fence_cnt - 1));
+            }
+            glPopMatrix();
+        }
+
+        glPushMatrix();
+        glTranslated(0, 0, bridge_length / 4 + bridge_width / 2);
+        for(double x : {-0.5, 0.5}) {
+            glPushMatrix();
+            glTranslated(x, fence_height, - 0.4);
+            parts::box(0.1, 0.1, bridge_length / 2 - 0.5);
+            glPopMatrix();
+        }
+        glMaterialfv(GL_FRONT, GL_DIFFUSE, bridge_color);
+        parts::box(bridge_width, 0.2, bridge_length / 2);
+        glPopMatrix();
         glRotated(90, 0, 1, 0);
     }
+    parts::box(1.2, 0.2, 1.2);
 
     glPopMatrix();
 }
 
 void draw::bank() {
     glPushMatrix();
-    const double sx = 10, sz = 10, h = 1;
+
+    GLfloat road_color[] = {0.3f, 0.3f, 0.3f, 1.0f};
+    GLfloat grass_color[] = {0.3f, 0.5f, 0.3f, 1.0f};
+
+
+    const double sx = 100, sz = 100, h = 1;
     const double outer_r = 2.5, inner_r = 1;
     const int pts = 40;
     const double dtheta = M_PI / 2 / pts;
@@ -69,7 +116,7 @@ void draw::bank() {
 
         glBegin(GL_QUADS); {
 
-            glColor3f(.5f, 1.0f, .5f);
+            glMaterialfv(GL_FRONT, GL_DIFFUSE, grass_color);
 
             glVertex3d(outer_r - inner_r, h, sz);
             glVertex3d(outer_r - inner_r, h, outer_r);
@@ -90,7 +137,7 @@ void draw::bank() {
             glVertex3d(outer_r, 0, 0);
             glVertex3d(sx, 0, 0);
 
-            glColor3f(0.7f, 0.7f, 0.7f);
+            glMaterialfv(GL_FRONT, GL_DIFFUSE, road_color);
             glVertex3d(outer_r, h, outer_r);
             glVertex3d(outer_r, h, sz);
             glVertex3d(sx, h, sz);
@@ -137,7 +184,8 @@ void draw::bank() {
 
 void draw::buildings() {
     glPushMatrix();
-    glColor3f(.3f, .3f, .3f);
+    GLfloat buildings_color[] = {0.5f, 0.5f, 0.5f, 1.0f};
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, buildings_color);
     REP(_, 4) {
         glPushMatrix();
         glTranslated(5, 0, 5);
