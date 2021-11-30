@@ -9,7 +9,9 @@
 void draw::all() {
     draw::axis();
     draw::river();
+    draw::bridge();
     draw::bank();
+    draw::buildings();
 }
 
 void draw::axis() {
@@ -41,11 +43,24 @@ void draw::river() {
     } glEnd();
 }
 
-void draw::bank() {
+void draw::bridge() {
+    glPushMatrix();
 
+    glColor3f(0.7f, 0.7f, 0.7f);
+    glTranslated(0, 0.9, 0);
+    glRotated(45, 0, 1, 0);
+    REP(i, 2) {
+        parts::box(1.2, 0.2, 10);
+        glRotated(90, 0, 1, 0);
+    }
+
+    glPopMatrix();
+}
+
+void draw::bank() {
     glPushMatrix();
     const double sx = 10, sz = 10, h = 1;
-    const double outer_r = 2, inner_r = 1;
+    const double outer_r = 2.5, inner_r = 1;
     const int pts = 40;
     const double dtheta = M_PI / 2 / pts;
     const double river_width = 2;
@@ -117,6 +132,26 @@ void draw::bank() {
 
         glPopMatrix();
 
+        glRotated(90, 0, 1, 0);
+    }
+    glPopMatrix();
+}
+
+void draw::buildings() {
+    glPushMatrix();
+    glColor3f(.3f, .3f, .3f);
+    REP(_, 4) {
+        glPushMatrix();
+        glTranslated(5, 0, 5);
+        int len = 5;
+        std::vector<vertexv> v {
+                {0, 0, 0},
+                {0, 0, len},
+                {len, 0, len},
+                {len, 0, 0},
+        };
+        parts::pillar(v, 0, 5, 0);
+        glPopMatrix();
         glRotated(90, 0, 1, 0);
     }
     glPopMatrix();

@@ -8,6 +8,10 @@ namespace draw {
     void river();
 
     void bank();
+
+    void bridge();
+
+    void buildings();
 }
 
 #endif //CLOVER_BRIDGE_DRAW_H
