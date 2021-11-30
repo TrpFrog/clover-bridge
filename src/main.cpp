@@ -9,12 +9,10 @@ camera cam(0, 0);
 using namespace std;
 
 void display() {
+    cam.apply();
 
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     draw::all();
-    glLoadIdentity();
-    cam.apply();
 
     glutSwapBuffers();
 }

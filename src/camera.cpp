@@ -29,13 +29,16 @@ void camera::apply() const {
     double eyeZ = z + eye_radius * std::sin(phi) * std::cos(theta);
     double eyeY = y + eye_radius * std::cos(phi);
 
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glLoadIdentity();
     gluLookAt(eyeX, eyeY, eyeZ, x, y, z,0.0, 1.0, 0.0);
 }
 
 void camera::reset() {
-    x = y = z = 0;
+    x = z = 0;
+    y = 1;
     key_pressed = false;
-    eye_radius = 30;
+    eye_radius = 10;
     angle_h = M_PI / 4;
     angle_v = M_PI / 4;
 }
