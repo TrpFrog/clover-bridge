@@ -57,7 +57,7 @@ void idle() {
 int main(int argc, char *argv[]) {
     glutInitWindowPosition(100, 100);
 
-    int w = 500, h = 500;
+    int w = 800, h = 600;
     glutInitWindowSize(w, h);
     cam = camera(w, h);
 
