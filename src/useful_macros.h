@@ -2,13 +2,13 @@
 #define CLOVER_BRIDGE_USEFUL_MACROS_H
 
 #include <iostream>
-#define GL_SILENCE_DEPRECATION
-#include <OpenGL/OpenGL.h>
 
 #ifdef __APPLE__
+    #define GL_SILENCE_DEPRECATION
+    #include <OpenGL/OpenGL.h>
     #include <GLUT/GLUT.h>
 #else
-    #include <GL/glut>
+    #include <GL/glut.h>
 #endif
 
 // iterator
