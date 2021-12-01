@@ -1,5 +1,7 @@
 # clover-bridge
 
+![world](/Users/trpfrog/Projects/clover-bridge/world.png)
+
 This is a repository of projects created in my university's OpenGL experiment.
 
 
