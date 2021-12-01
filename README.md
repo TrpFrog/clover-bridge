@@ -1,28 +1,34 @@
 # clover-bridge
 
+This is a repository of projects created in my university's OpenGL experiment.
 
 
-## 実行方法
 
-`run.sh` を実行するか、次のコマンドを入力してください。
+## How to build
 
-```
-$ cmake -B out .
-$ cmake --build out
-$ ./out/clover-bridge
-```
-
-cmakeが導入されていない場合は
+Run `run.sh` or enter following commands.
 
 ```
-$ brew install cmake    # Homebrewが導入されたmacOSの場合
+$ cmake .
+$ cmake --build .
+$ ./clover-bridge
 ```
 
-などの方法で cmake をインストールしてください。
+
+
+## Key Binding
+
+| Key           | Operation               |
+| ------------- | ----------------------- |
+| W / A / S / D | Move                    |
+| J / K         | Rise / Fall             |
+| I / O         | Zoom in/out             |
+| Mouse drag    | Change your perspective |
+| Middle click  | Reset your perspective  |
 
 
 
-## 実行確認環境
+## Development Environment
 
 - macOS Monterey 12.0.1
 - CMake 3.22.0
