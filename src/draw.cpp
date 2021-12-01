@@ -1,9 +1,16 @@
 #include "draw.h"
 #include "parts.h"
 #include "useful_macros.h"
+#include <tuple>
 #include <vector>
 #include <cmath>
+#include <chrono>
 
+long long millis() {
+    using namespace std::chrono;
+    auto now = system_clock::now().time_since_epoch();
+    return duration_cast<milliseconds>(now).count();
+}
 
 void draw::all() {
 //    draw::axis();
@@ -11,6 +18,7 @@ void draw::all() {
     draw::bridge();
     draw::bank();
     draw::buildings();
+    draw::boat_animation();
 }
 
 void draw::axis() {
@@ -32,8 +40,12 @@ void draw::axis() {
 }
 
 void draw::river() {
-    GLfloat river_color[] = {.3f / 2, .44f / 2, 0.85f / 2, 1.0f};
+    GLfloat river_color[] = {.0f, .44f, .95f, 1.0f};
+    GLfloat white[] = {1.0f, 1.0f, 1.0f, 1.0f};
+    GLfloat gray[] = {.1f, .1f, .1f, 1.0f};
+
     glMaterialfv(GL_FRONT, GL_DIFFUSE, river_color);
+    glMaterialfv(GL_FRONT, GL_AMBIENT, white);
     const float field_size = 202;
     glNormal3d(0, 1, 0);
     glBegin(GL_QUADS); {
@@ -42,6 +54,7 @@ void draw::river() {
         glVertex3d(-field_size / 2, 0, -field_size / 2);
         glVertex3d(-field_size / 2, 0, field_size / 2);
     } glEnd();
+    glMaterialfv(GL_FRONT, GL_AMBIENT, gray);
 }
 
 void draw::bridge() {
@@ -68,9 +81,10 @@ void draw::bridge() {
 
     REP(i, 4) {
 
-        glMaterialfv(GL_FRONT, GL_DIFFUSE, fence_color);
+        parts::render(0.4f, 0.4f, 0.8f,
+                      0.4f, 0.4f, 0.8f, 0.633, 0.727811, 0.633, 0.4);
         for(double x : {-0.5, 0.5}) {
-            glPushMatrix();
+        glPushMatrix();
             glTranslated(x, 0, bridge_width / 2 - 0.1);
             REP(j, fence_cnt) {
                 parts::pillar(circle_vertices, 0, fence_height, 0);
@@ -87,6 +101,7 @@ void draw::bridge() {
             parts::box(0.1, 0.1, bridge_length / 2 - 0.5);
             glPopMatrix();
         }
+        parts::default_render();
         glMaterialfv(GL_FRONT, GL_DIFFUSE, bridge_color);
         parts::box(bridge_width, 0.2, bridge_length / 2);
         glPopMatrix();
@@ -200,5 +215,89 @@ void draw::buildings() {
         glPopMatrix();
         glRotated(90, 0, 1, 0);
     }
+    glPopMatrix();
+}
+
+void draw::boat_animation() {
+    GLfloat blue[]   = {0.3f, 0.3f, 0.8f, 1.0f};
+    GLfloat yellow[] = {0.6f, 0.6f, 0.3f, 1.0f};
+    GLfloat red[]    = {0.8f, 0.3f, 0.3f, 1.0f};
+    GLfloat green[]  = {0.3f, 0.8f, 0.3f, 1.0f};
+
+    long long unixtime = millis();
+
+    glPushMatrix();
+
+    parts::render(0.19125, 0.0735, 0.0225,
+                  0.3f, 0.3f, 0.8f, 0.256777, 0.137622, 0.086014, 0.1);
+    draw::boat((unixtime % 160000 - 80000.0) / 800.0, 0, 0, 90);
+
+    parts::render(0.19125, 0.0735, 0.0225,
+                  0.6f, 0.6f, 0.3f, 0.256777, 0.137622, 0.086014, 0.1);
+    draw::boat(0, 0, ((unixtime + 40000) % 160000 - 80000.0) / 800.0, 0);
+
+    parts::render(0.19125, 0.0735, 0.0225,
+                  0.8f, 0.3f, 0.3f, 0.256777, 0.137622, 0.086014, 0.1);
+    draw::boat(((unixtime + 80000) % 160000 - 80000.0) / 800.0, 0, 0, 90);
+
+    parts::render(0.19125, 0.0735, 0.0225,
+                  0.3f, 0.8f, 0.3f, 0.256777, 0.137622, 0.086014, 0.1);
+    draw::boat(0, 0, ((unixtime + 120000) % 160000 - 80000.0) / 800.0, 0);
+
+    glPopMatrix();
+
+    parts::default_render();
+}
+
+void draw::boat(double x, double y, double z, double angle) {
+    glPushMatrix();
+    glTranslated(x, y, z);
+    glRotated(angle, 0, 1, 0);
+    glScaled(.7, .7, .7);
+
+    double vertices[][3] = {
+            {-1, .5, 1},
+            {1, .5, 1},
+            {1, .5, -2},
+            {-1, .5, -2},
+            {0, -.5, .5},
+            {0, -.5, -1},
+            {0, .7, 2}
+    };
+
+    std::vector<std::vector<int>> quad_edges = {
+            {0, 1, 2, 3},
+            {0, 3, 5, 4},
+            {1, 4, 5, 2}
+    };
+
+    std::vector<std::vector<int>> tri_edges = {
+            {0, 6, 1},
+            {2, 5, 3},
+            {1, 6, 4},
+            {0, 4, 6}
+    };
+
+    glBegin(GL_QUADS);
+    for(auto &v : quad_edges) {
+        parts::set_normal_vector(vertices[v[0]], vertices[v[1]], vertices[v[2]]);
+        for(int i : v) {
+            glVertex3dv(vertices[i]);
+        }
+    }
+    glEnd();
+
+    glBegin(GL_TRIANGLES);
+    for(auto &v : tri_edges) {
+        parts::set_normal_vector(vertices[v[0]], vertices[v[1]], vertices[v[2]]);
+        for(int i : v) {
+            glVertex3dv(vertices[i]);
+        }
+    }
+    glEnd();
+
+    glTranslated(0, .5, -.5);
+    parts::box(1, .5, 1.5);
+
     glPopMatrix();
 }

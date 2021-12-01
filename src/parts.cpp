@@ -21,7 +21,6 @@ std::vector<vertexv> box_vertex(GLdouble x, GLdouble y, GLdouble z) {
     return vertex;
 }
 
-
 const std::vector<edge> box_edges = {
         {0, 1},
         {1, 2},
@@ -89,6 +88,13 @@ void parts::set_normal_vector(vertexv a, vertexv b, vertexv c) {
     glNormal3d(x / d, y / d, z / d);
 }
 
+void parts::set_normal_vector(double a[3], double b[3], double c[3]) {
+    vertexv a2 = {a[0], a[1], a[2]};
+    vertexv b2 = {b[0], b[1], b[2]};
+    vertexv c2 = {c[0], c[1], c[2]};
+    parts::set_normal_vector(a2, b2, c2);
+}
+
 void parts::pillar(std::vector<vertexv> &v, double nx, double ny, double nz) {
     int n = (int) v.size();
     glBegin(GL_POLYGON);
@@ -118,4 +124,30 @@ void parts::pillar(std::vector<vertexv> &v, double nx, double ny, double nz) {
         glVertex3d(x + nx, y + ny, z + nz);
     }
     glEnd();
+}
+
+void parts::default_render() {
+    parts::render(0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+}
+
+void parts::render(
+               GLfloat ambr, GLfloat ambg, GLfloat ambb,
+               GLfloat difr, GLfloat difg, GLfloat difb,
+               GLfloat specr, GLfloat specg, GLfloat specb, GLfloat shine)
+{
+    float mat[4];
+    mat[0] = ambr;
+    mat[1] = ambg;
+    mat[2] = ambb;
+    mat[3] = 1.0;
+    glMaterialfv(GL_FRONT, GL_AMBIENT, mat);
+    mat[0] = difr;
+    mat[1] = difg;
+    mat[2] = difb;
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat);
+    mat[0] = specr;
+    mat[1] = specg;
+    mat[2] = specb;
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat);
+    glMaterialf(GL_FRONT, GL_SHININESS, shine * 128.0);
 }
