@@ -96,6 +96,16 @@ void camera::keyboard(unsigned char key, int x, int y) {
         camera::z -= 0.1 * std::cos(camera::angle_h + d);
         camera::x -= 0.1 * std::sin(camera::angle_h + d);
     }
+
+    if(key == 'i' || key == 'I') {
+        eye_radius -= 1;
+    } else if(key == 'o' || key == 'O') {
+        eye_radius += 1;
+    } else if(key == 'j' || key == 'J') {
+        camera::y += 0.1;
+    } else if(key == 'k' || key == 'K') {
+        camera::y -= 0.1;
+    }
 }
 
 void camera::mouse_wheel(int button, int dir, int x, int y) {
