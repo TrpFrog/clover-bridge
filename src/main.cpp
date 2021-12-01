@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include "useful_macros.h"
 #include "draw.h"
 #include "camera.h"
@@ -8,18 +6,39 @@ camera cam(0, 0);
 
 using namespace std;
 
+GLfloat light0pos[] = {  0.0, 20.0,  0.0, 1.0 };
+
 void display() {
     cam.apply();
 
+    glLightfv(GL_LIGHT0, GL_POSITION, light0pos);
 
     draw::all();
 
     glutSwapBuffers();
 }
 
+GLfloat white[] = { 1.0, 1.0, 1.0, 1.0 };
+GLfloat gray[] = { 0.5, 0.5, 0.5, 1.0 };
+
 void init() {
     glClearColor(0.58, 0.75, 0.92, 0);
     glEnable(GL_DEPTH_TEST);
+
+    glCullFace(GL_FRONT);
+    glEnable(GL_LIGHTING);
+
+    glEnable(GL_LIGHT0);
+    glEnable(GL_LIGHT1);
+    glEnable(GL_LIGHT2);
+
+    glLightfv(GL_LIGHT0, GL_AMBIENT, gray);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, white);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, white);
+    glLightfv(GL_LIGHT1, GL_DIFFUSE, white);
+    glLightfv(GL_LIGHT1, GL_SPECULAR, white);
+    glLightfv(GL_LIGHT2, GL_DIFFUSE, gray);
+    glLightfv(GL_LIGHT2, GL_SPECULAR, gray);
 }
 
 void resize(int w, int h) {
@@ -76,5 +95,4 @@ int main(int argc, char *argv[]) {
     glutReshapeFunc(resize);
     init();
     glutMainLoop();
-
 }
